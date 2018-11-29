@@ -1,0 +1,56 @@
+<% include header %>
+       <% if (person.length) { %>
+        <h2> Item List  <%= person[0].name %>님, 안녕하세요! </h2>
+      <% } else {%> 
+        <h2>
+        <form name="form-form"  action="/new-person" method="get" id="submit_form ">
+           <button type="submit" class="btn btn-light pull-right">사용자 등록</button>
+        </form>
+        </h2>
+      <% }%>
+  <hr/>
+<% if (items.length) { %>
+  <% items.forEach(function(item, index) { %>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="text-muted pull-right">
+          <%= item.published %>
+        </div>
+        <form name="form-form"  action="/renew" method="get" id="submit_form ">
+          <input type="submit" value="Renew" class="btn btn-primary">
+        </form>
+      </div>
+      <div class="panel-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col"><h2>Type</h2></th>
+              <th scope="col"><h2>Information</h2></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">명칭</th>
+              <td><%= item.name %></td>
+            </tr>
+            <tr>
+              <th scope="row">매매대금</th>
+              <td><%= item.price %></td>
+            </tr>
+            <tr>
+              <th scope="row">소재지</th>
+              <td><%= item.address %></td>
+            </tr>
+            <tr>
+              <th scope="row">부동산 고유번호</th>
+              <td><%= item.id %></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% }) %>
+<% } else { %>
+  No Items!
+<% } %>
+<% include footer %>
