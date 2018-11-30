@@ -2,18 +2,42 @@
        <% if (person.length) { %>
         <h2>
           <div class="big-box">
-            <form name="form-form"  action="/new-person" method="get" id="submit_form ">
-              Item List  <%= person[0].name %>님, 안녕하세요!
-              <button type="submit" class="btn btn-warning pull-right">로그아웃</button>
-            </form>
+            <div class="col-md-9">
+                <b><%= person[0].name %></b>님, 안녕하세요!
+            </div>
+              <div class="col-sm-1">
+                <a href="/renew" class="btn btn-primary col-sm-30">
+                  새로고침
+                </a>
+              </div>
+              <div class="col-lg-1">
+                <a href="/new-item" class="btn btn-primary">
+                  등록하기
+                </a>
+              </div>
+            <div class="col-lg-1">
+              <form name="form-form"  action="/logout" method="get" id="submit_form ">
+                <button type="submit" class="btn btn-danger col-sm-30">로그아웃</button>
+              </form>
+            </div>
           </div>
         </h2>
       <% } else {%> 
         <h2>
           <div class="big-box">
-            <form name="form-form"  action="/new-person" method="get" id="submit_form ">
-              <button type="submit" class="btn btn-success pull-right">로그인</button>
-            </form>
+            <div class="col-lg-10">
+                로그인을 하고 서비스를 이용하세요.
+            </div>
+            <div class="col-lg-1">
+              <a href="/renew" class="btn btn-primary">
+                새로고침
+              </a>
+            </div>
+            <div class="col-lg-1">
+              <form name="form-form"  action="/new-person" method="get" id="submit_form ">
+                <button type="submit" class="btn btn-success ">로그인</button>
+              </form>
+            </div>
           </div>
         </h2>
       <% }%>
@@ -26,15 +50,17 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <div class="form-group col-lg-1">
-          <form name="form-form"  action="/renew" method="get" id="submit_form ">
-            <input type="submit" value="Buy" class="btn btn-info btn-lg">
+          <form name="form-form-form"  action="/buy" method="post" id="submit_form ">
+            <input type="hidden" class="form-control" id="buy" name="buy" value=<%= item.index %> >
+            <button type="submit" class="btn btn-primary btn-lg">Buy</button>
           </form>
         </div>
-        <div class="form-group col-lg-6">
-          <form name="form-form"  action="/renew" method="get" id="submit_form ">
-            <input type="submit" value="Revise" class="btn btn-warning btn-lg">
-          </form>
-        </div>
+        <form class="form col-lg-6">
+          <div name="form-form"  action="/revise" method="get" id="submit_form ">
+            <input type="hidden" class="form-control" id="revise" name="revise" value=<%= item.index %> >
+            <button type="submit" class="btn btn-warning btn-lg">Revise</button>
+          </div>
+        </form>
         <div class="text-muted col-lg-5">
           <br>
           <%= item.published %>
