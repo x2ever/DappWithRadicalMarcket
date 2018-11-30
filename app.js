@@ -8,7 +8,7 @@ var myAccount = null;
 
 var Web3 = require('web3');
 var web3 = new Web3("ws://localhost:8545");
-var contractAddress = "0x6fd391fb2e8f135da6cb6c73e67fa030201b9454"
+var contractAddress = "0xdc2e5de9b6c7ab859b7a45bae4b098693a2ce8b3"
 var abi = [
 	{
 		"constant": false,
@@ -250,7 +250,7 @@ var myContract = new web3.eth.Contract(abi, contractAddress);
 var app = express();
 
 var items = [];
-var person = null;
+var person = [];
 
 app.locals.items = items;
 app.locals.person = person;
@@ -262,18 +262,125 @@ app.set("view engine", "ejs");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
+
+myContract.methods.viewItemInfo(0).call().then(function(result){
+    if (result[6] ==  true){
+        app.locals.items.push({
+            name: result[2],
+            price: Number(result[5]),
+            id: Number(result[3]),
+            address: result[4],
+            published: new Date(1000 * Number(result[1]))
+        });
+    }
+});
+myContract.methods.viewItemInfo(1).call().then(function(result){
+    if (result[6] ==  true){
+        app.locals.items.push({
+            name: result[2],
+            price: Number(result[5]),
+            id: Number(result[3]),
+            address: result[4],
+            published: new Date(1000 * Number(result[1]))
+        });
+    }
+});
+myContract.methods.viewItemInfo(2).call().then(function(result){
+    if (result[6] ==  true){
+        app.locals.items.push({
+            name: result[2],
+            price: Number(result[5]),
+            id: Number(result[3]),
+            address: result[4],
+            published: new Date(1000 * Number(result[1]))
+        });
+    }
+});
+myContract.methods.viewItemInfo(3).call().then(function(result){
+    if (result[6] ==  true){
+        app.locals.items.push({
+            name: result[2],
+            price: Number(result[5]),
+            id: Number(result[3]),
+            address: result[4],
+            published: new Date(1000 * Number(result[1]))
+        });
+    }
+});
+myContract.methods.viewItemInfo(4).call().then(function(result){
+    if (result[6] ==  true){
+        app.locals.items.push({
+            name: result[2],
+            price: Number(result[5]),
+            id: Number(result[3]),
+            address: result[4],
+            published: new Date(1000 * Number(result[1]))
+        });
+    }
+});
+
 app.get("/", function(req, res) {
   res.render("index");
 });
 
 app.get("/renew", function(req, res) {
-    function renew(){
-        myContract.methods.viewItemInfo(a).call().then(function(result){
-            result[0];
-        })
-    }
-    
-  res.redirect("/");
+    app.locals.items = [];
+    myContract.methods.viewItemInfo(0).call().then(function(result){
+        if (result[6] ==  true){
+            app.locals.items.push({
+                name: result[2],
+                price: Number(result[5]),
+                id: Number(result[3]),
+                address: result[4],
+                published: new Date(1000 * Number(result[1]))
+            });
+        }
+    });
+    myContract.methods.viewItemInfo(1).call().then(function(result){
+        if (result[6] ==  true){
+            app.locals.items.push({
+                name: result[2],
+                price: Number(result[5]),
+                id: Number(result[3]),
+                address: result[4],
+                published: new Date(1000 * Number(result[1]))
+            });
+        }
+    });
+    myContract.methods.viewItemInfo(2).call().then(function(result){
+        if (result[6] ==  true){
+            app.locals.items.push({
+                name: result[2],
+                price: Number(result[5]),
+                id: Number(result[3]),
+                address: result[4],
+                published: new Date(1000 * Number(result[1]))
+            });
+        }
+    });
+    myContract.methods.viewItemInfo(3).call().then(function(result){
+        if (result[6] ==  true){
+            app.locals.items.push({
+                name: result[2],
+                price: Number(result[5]),
+                id: Number(result[3]),
+                address: result[4],
+                published: new Date(1000 * Number(result[1]))
+            });
+        }
+    });
+    myContract.methods.viewItemInfo(4).call().then(function(result){
+        if (result[6] ==  true){
+            app.locals.items.push({
+                name: result[2],
+                price: Number(result[5]),
+                id: Number(result[3]),
+                address: result[4],
+                published: new Date(1000 * Number(result[1]))
+            });
+        }
+        res.redirect("/");
+    });
 });
 
 app.get("/new-item", function(req, res) {

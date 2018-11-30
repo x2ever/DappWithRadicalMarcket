@@ -1,24 +1,48 @@
 <% include header %>
        <% if (person.length) { %>
-        <h2> Item List  <%= person[0].name %>님, 안녕하세요! </h2>
+        <h2>
+          <div class="big-box">
+            <form name="form-form"  action="/new-person" method="get" id="submit_form ">
+              Item List  <%= person[0].name %>님, 안녕하세요!
+              <button type="submit" class="btn btn-warning pull-right">로그아웃</button>
+            </form>
+          </div>
+        </h2>
       <% } else {%> 
         <h2>
-        <form name="form-form"  action="/new-person" method="get" id="submit_form ">
-           <button type="submit" class="btn btn-light pull-right">사용자 등록</button>
-        </form>
+          <div class="big-box">
+            <form name="form-form"  action="/new-person" method="get" id="submit_form ">
+              <button type="submit" class="btn btn-success pull-right">로그인</button>
+            </form>
+          </div>
         </h2>
       <% }%>
-  <hr/>
+<hr/>
+<hr/>
+<hr/>
+<div class="border-box">
 <% if (items.length) { %>
   <% items.forEach(function(item, index) { %>
     <div class="panel panel-default">
       <div class="panel-heading">
-        <div class="text-muted pull-right">
+        <div class="form-group col-lg-1">
+          <form name="form-form"  action="/renew" method="get" id="submit_form ">
+            <input type="submit" value="Buy" class="btn btn-info btn-lg">
+          </form>
+        </div>
+        <div class="form-group col-lg-6">
+          <form name="form-form"  action="/renew" method="get" id="submit_form ">
+            <input type="submit" value="Revise" class="btn btn-warning btn-lg">
+          </form>
+        </div>
+        <div class="text-muted col-lg-5">
+          <br>
           <%= item.published %>
         </div>
-        <form name="form-form"  action="/renew" method="get" id="submit_form ">
-          <input type="submit" value="Renew" class="btn btn-primary">
-        </form>
+        <div class="form-group col-lg-0">
+            <br>
+            <br>
+        </div>
       </div>
       <div class="panel-body">
         <table class="table">
@@ -53,4 +77,5 @@
 <% } else { %>
   No Items!
 <% } %>
+</div>
 <% include footer %>

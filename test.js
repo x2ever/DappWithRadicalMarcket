@@ -1,9 +1,9 @@
 var Web3 = require('web3');
 var web3 = new Web3("ws://localhost:8545");
 
-var privateKey = "0x8a3e5c04ca5933e3d8feab33f4bebb2efb221720f21edca5f856c60370628f8e";
+var privateKey = "0xf390a5abbb376b294ea47f0b27ae599e1499b0770484d7c5973121fbc0544772";
 var myAccount = web3.eth.accounts.privateKeyToAccount(privateKey);
-var contractAddress = "0x6fd391fb2e8f135da6cb6c73e67fa030201b9454"
+var contractAddress = "0xdc2e5de9b6c7ab859b7a45bae4b098693a2ce8b3"
 console.log(myAccount.address, privateKey);
 var abi = [
 	{
@@ -262,9 +262,16 @@ web3.eth.accounts.signTransaction(transactionObject, privateKey, function (error
 });
 */
 var a = 123;
-myContract.methods.viewItemInfo(0).call().then()
-
-
-function callDone() {
-	console.log(a);
-}
+myContract.methods.viewItemInfo(0).call().then(function(result){
+    console.log(result);
+    if (result[6] ==  true){
+        a = {
+            "name": result[2],
+            "price": Number(result[5]),
+            "id": Number(result[3]),
+            "address": result[4],
+            "published": new Date(1000 * Number(result[1]))
+        };
+        console.log(a);
+    }
+})
