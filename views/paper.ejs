@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+	  .box-container{
+		display: inline-block;
+		border: 2px solid #000;
+        width: 630px;
+        height: 891px;
+		margin: 0% 0%;
+        padding: 10px;
+	  }
+      .box1{
+          border-radius: 10px;
+          border: 2px solid #000;
+          width: 630px;
+          height: 60px;
+          padding: 10px;
+          margin: 10% 0%;
+        }
+    </style>
+    <meta charset="utf-8">
+  <title>
+    Decentralization Real Estate Trading Platform Application
+  </title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="col-lg-4">
+      </div>
+    <div class=" col-lg-2">
+        <div class="box1">
+          <div class="col-lg-8">
+            <a href="/paper" class="btn ">
+                <b class='text-muted'><%= buyLog.item.name %>에 대한 소유권이전등기신청서</b>
+            </a>
+          </div>
+          <div class="col-lg-2">
+            <a href="/renew" class="btn btn-primary">
+              돌아가기
+            </a>
+          </div>
+          <div class="col-lg-2">
+            <a href="/renew" class="btn btn-info">
+              저장하기
+            </a>
+          </div>
+        </div>
+    <div class="box-container">
+        <h2>소유권이전등기신청서</h2>
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th scope="col"> <b>Item</b> </th>
+          <th scope="col">Contents</th>
+        </tr>
+      </thead>
+      <tbody class="container">
+        <tr>
+          <th scope="row">명칭</th>
+          <td><%= buyLog.item.name %></td>
+        </tr>
+        <tr>
+          <th scope="row">매매대금</th>
+          <td><%= buyLog.item.price %></td>
+        </tr>
+        <tr>
+          <th scope="row">부동산 고유번호</th>
+          <td><%= buyLog.item.id %></td>
+        </tr>
+        <tr>
+          <th scope="row">소재지</th>
+          <td><%= buyLog.item.address %></td>
+        </tr>
+        <tr>
+          <th scope="row">등록일자</th>
+          <td><%= buyLog.item.published %></td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th scope="col"> <b>Buyer</b> </th>
+          <th scope="col">Contents</th>
+        </tr>
+      </thead>
+      <tbody class="container">
+        <tr>
+          <th scope="row">성명</th>
+          <td><%= buyLog.buyer.name %></td>
+        </tr>
+        <tr>
+          <th scope="row">주민등록번호</th>
+          <td><%= buyLog.buyer.idNumber %></td>
+        </tr>
+        <tr>
+          <th scope="row">소재지</th>
+          <td><%= buyLog.buyer.where %></td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th scope="col"> <b>Seller</b> </th>
+          <th scope="col">Contents</th>
+        </tr>
+      </thead>
+      <tbody class="container">
+        <tr>
+          <th scope="row">성명</th>
+          <td><%= buyLog.seller.name %></td>
+        </tr>
+        <tr>
+          <th scope="row">주민등록번호</th>
+          <td><%= buyLog.seller.idNumber %></td>
+        </tr>
+        <tr>
+          <th scope="row">소재지</th>
+          <td><%= buyLog.seller.where %></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    </div>
+  </body>
+</html>

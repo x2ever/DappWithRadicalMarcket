@@ -8,52 +8,40 @@ var myAccount = null;
 
 var Web3 = require('web3');
 var web3 = new Web3("ws://localhost:8545");
-var contractAddress = "0x6fd391fb2e8f135da6cb6c73e67fa030201b9454"
+var contractAddress = "0x6ca319d881f4aba886c87ff89b09e570564fddc0"
 var abi = [
 	{
 		"constant": false,
+		"inputs": [
+			{
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"name": "idNumber",
+				"type": "uint256"
+			},
+			{
+				"name": "where",
+				"type": "string"
+			}
+		],
+		"name": "renewPerson",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
 		"inputs": [
 			{
 				"name": "index",
 				"type": "uint256"
 			}
 		],
-		"name": "buyItem",
+		"name": "viewPersonInfo",
 		"outputs": [
-			{
-				"components": [
-					{
-						"name": "owner",
-						"type": "address"
-					},
-					{
-						"name": "time",
-						"type": "uint256"
-					},
-					{
-						"name": "name",
-						"type": "string"
-					},
-					{
-						"name": "idNumber",
-						"type": "uint256"
-					},
-					{
-						"name": "where",
-						"type": "string"
-					},
-					{
-						"name": "value",
-						"type": "uint256"
-					},
-					{
-						"name": "valid",
-						"type": "bool"
-					}
-				],
-				"name": "",
-				"type": "tuple"
-			},
 			{
 				"components": [
 					{
@@ -73,6 +61,28 @@ var abi = [
 				"type": "tuple"
 			}
 		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "index",
+				"type": "uint256"
+			},
+			{
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "renewItem",
+		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -126,44 +136,63 @@ var abi = [
 		"type": "function"
 	},
 	{
-		"constant": false,
+		"constant": true,
 		"inputs": [
 			{
 				"name": "index",
 				"type": "uint256"
-			},
-			{
-				"name": "name",
-				"type": "string"
-			},
-			{
-				"name": "value",
-				"type": "uint256"
 			}
 		],
-		"name": "renewItem",
-		"outputs": [],
+		"name": "viewItemInfo",
+		"outputs": [
+			{
+				"components": [
+					{
+						"name": "owner",
+						"type": "address"
+					},
+					{
+						"name": "time",
+						"type": "uint256"
+					},
+					{
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"name": "idNumber",
+						"type": "uint256"
+					},
+					{
+						"name": "where",
+						"type": "string"
+					},
+					{
+						"name": "value",
+						"type": "uint256"
+					},
+					{
+						"name": "valid",
+						"type": "bool"
+					}
+				],
+				"name": "",
+				"type": "tuple"
+			}
+		],
 		"payable": false,
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
 		"constant": false,
 		"inputs": [
 			{
-				"name": "name",
-				"type": "string"
-			},
-			{
-				"name": "idNumber",
+				"name": "index",
 				"type": "uint256"
-			},
-			{
-				"name": "where",
-				"type": "string"
 			}
 		],
-		"name": "renewPerson",
+		"name": "buyItem",
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
@@ -238,57 +267,8 @@ var abi = [
 		],
 		"name": "buy_item",
 		"type": "event"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "index",
-				"type": "uint256"
-			}
-		],
-		"name": "viewItemInfo",
-		"outputs": [
-			{
-				"components": [
-					{
-						"name": "owner",
-						"type": "address"
-					},
-					{
-						"name": "time",
-						"type": "uint256"
-					},
-					{
-						"name": "name",
-						"type": "string"
-					},
-					{
-						"name": "idNumber",
-						"type": "uint256"
-					},
-					{
-						"name": "where",
-						"type": "string"
-					},
-					{
-						"name": "value",
-						"type": "uint256"
-					},
-					{
-						"name": "valid",
-						"type": "bool"
-					}
-				],
-				"name": "",
-				"type": "tuple"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
 	}
-]
+];
 var myContract = new web3.eth.Contract(abi, contractAddress);
 
 var app = express();
@@ -299,6 +279,7 @@ var Tempindex = null;
 
 app.locals.items = items;
 app.locals.person = person;
+app.locals.buyLog = null; 
 
 app.use(logger("dev"));
 
@@ -452,17 +433,50 @@ app.post("/buy", function(req, res){
         if (error) {
             console.log(error);
         } else {
-            web3.eth.sendSignedTransaction(signedTx.rawTransaction).on('receipt', function (receipt) {
-                console.log(receipt);
+            web3.eth.sendSignedTransaction(signedTx.rawTransaction).then(function(result){
+                myContract.methods.viewPersonInfo(Number(req.body.buy)).call().then(function(result){
+                    console.log(result);
+                    var name = result[0];
+                    var idNumber = result[1];
+                    var where = result[2];
+                    app.locals.buyLog = {
+                        seller: {
+                            name: result[0],
+                            idNumber: result[1],
+                            where: result[2]
+                        },
+                        buyer: {
+                            name: app.locals.person[0].name,
+                            idNumber: app.locals.person[0].id,
+                            where: app.locals.person[0].address
+                        },
+                        item: {
+                            name: null,
+                            price: null,
+                            id: null,
+                            address: null,
+                            published: null
+                        }
+                    };
+                    myContract.methods.viewItemInfo(Number(req.body.buy)).call().then(function(result){
+                        app.locals.buyLog.item = {
+                            name: result[2],
+                            price: Number(result[5]),
+                            id: Number(result[3]),
+                            address: result[4],
+                            published: new Date(1000 * Number(result[1]))
+                        };
+                        console.log(app.locals.buyLog);
+                        res.render("paper");
+                    });
+                });
             });
         }
-        res.redirect("renew");
     });
 });
 
-app.get("/?revise", function(req, res){
-    Tempindex = req.body.revise;
-    console.log(Tempindex);
+app.post("/revise", function(req, res){
+    Tempindex = req.body.index;
     res.render("renew-item");
 });
 
@@ -484,7 +498,7 @@ app.post("/revise/send", function(req, res){
             });
         }
     });
-    res.redirect("renew");
+    res.redirect("/renew");
 });
 
 
