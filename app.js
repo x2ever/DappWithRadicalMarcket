@@ -8,7 +8,7 @@ var myAccount = null;
 
 var Web3 = require('web3');
 var web3 = new Web3("ws://localhost:8545");
-var contractAddress = "0x6ca319d881f4aba886c87ff89b09e570564fddc0"
+var contractAddress = "0x1646ee7ed5f8f362ebc5b87153c3c42962e9303d";
 var abi = [
 	{
 		"constant": false,
@@ -193,7 +193,12 @@ var abi = [
 			}
 		],
 		"name": "buyItem",
-		"outputs": [],
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
 		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -435,10 +440,6 @@ app.post("/buy", function(req, res){
         } else {
             web3.eth.sendSignedTransaction(signedTx.rawTransaction).then(function(result){
                 myContract.methods.viewPersonInfo(Number(req.body.buy)).call().then(function(result){
-                    console.log(result);
-                    var name = result[0];
-                    var idNumber = result[1];
-                    var where = result[2];
                     app.locals.buyLog = {
                         seller: {
                             name: result[0],

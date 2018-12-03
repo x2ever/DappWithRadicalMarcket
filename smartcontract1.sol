@@ -85,4 +85,8 @@ contract Chap1 {
     function viewItemInfo(uint index) public view returns (Item memory){
         return itemInfo[index];
     }
+    
+    function viewPersonInfo(uint index) public view returns (Person memory){
+        return personInfo[itemInfo[index].owner];
+    }
 }
