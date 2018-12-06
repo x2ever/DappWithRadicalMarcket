@@ -8,7 +8,7 @@ var myAccount = null;
 
 var Web3 = require('web3');
 var web3 = new Web3("ws://localhost:8545");
-var contractAddress = "0x1646ee7ed5f8f362ebc5b87153c3c42962e9303d";
+var contractAddress = "0x6fd391fb2e8f135da6cb6c73e67fa030201b9454";
 var abi = [
 	{
 		"constant": false,
